@@ -12,10 +12,7 @@ TIGERi
 > **2) A client part (HTML - Javascript - Websocket)** .
 
 ----------
-
-### How To Use TIGERi ?
-
-You can use it like this:
+### DEMO 
 
 In Real Life :
 ```sequence
@@ -31,3 +28,9 @@ SERVER->Bob: Hello Bob, how are you?
 Bob-->SERVER: I am good thanks!
 SERVER-->Alice: I am good thanks!
 ```
+
+### How To Use TIGERi ?
+
+You can use it like this:
+
+( Documentation will be available as soon as possible )
