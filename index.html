@@ -1,0 +1,233 @@
+<html>
+  <head>
+    <style>
+      body {
+        font-family: "Helvetica Neue", helvetica, arial;
+        padding: 15px;
+      }
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      ul li {
+        line-height: 1.4;
+      }
+    </style>
+
+  </head>
+  <body>
+    <h1>TIGERi</h1>
+    <ul id='notes' style="color: black"></ul> <br><br>
+	<ul id='messages' style="color: orange"></ul> <br><br>
+    <ul id='errors' style="color: red"></ul> 
+    <script>
+
+function tigeri(){
+
+function vstr(str,bempty){ if(bempty==undefined){bempty=false;}  if(str == null || str == undefined){return false;}  if(str=="" && bempty==true){return false;}  return true;}
+
+    var eyeTAB = [];
+	var me=this;
+	this.CountEyes = function(){return eyeTAB.length;};
+	this.IndexEye = function(name){ if(vstr(name,true)==true){ var i=0; var t=this.CountEyes();  for(i=0;i<t;i++){ if(eyeTAB[i].getNAME()==name){return i;} } }  return -1; };
+	
+	this.Eye = function(name){ var i = this.IndexEye(name); if(i>=0 && i<this.CountEyes()){return eyeTAB[i];}  return null;};
+	
+
+	this.OpenEye = function(name,url){ if(vstr(name,true)==true){ if(this.IndexEye(name)<0){ eyeTAB.push(new tigeriController(name,url,true)); } }    return this;};
+	this.CloseEye = function(name){ var e = this.Eye(name);  if(e!= null && e!= undefined){e.die(); eyeTAB.splice(this.IndexEye(name), 1);}     return this;};
+	
+	this.GETNEWESTDATA = function(name){var e = this.Eye(name); if(e!=null && e!=undefined){var d = e.getLASTDATA();  if(d.reads<2){return e.getLASTDATA().data;} } return "";};
+	
+	this.getEyesList = function(){
+		var t = this.CountEyes();  var i; var tab = [];
+		for(i=0;i<t;i++){   tab.push(eyeTAB[i].getNAME());   }
+		return tab; 
+	};
+	
+
+	 this.look = function(){
+	     var list  = me.getEyesList(); var t = list.length; var i; var data=[];
+		 for(i=0;i<t;i++){ data.push( me.GETNEWESTDATA(list[i]) ); } return data.toString();
+		  };
+	 
+	 // Tiger life = 1 time !!!
+	 this.kill = function() { var list  = this.getEyesList(); var t = list.length; var i; for(i=0;i<t;i++){ this.CloseEye(list[i]); } clearInterval(timer); };
+	
+	 this.sleep = function(dt){ var t = this.CountEyes();  var i; var tab = []; for(i=0;i<t;i++){  eyeTAB[i].sleep(dt);   } return this; };
+	 
+	 
+}
+//*******************************************************************************************************************************************************
+	            function tigeriController(name,url,auto_init)
+				{   
+				
+				if(auto_init==undefined){auto_init=false;}
+				
+				    var me=this;
+					var dataTAB = [];
+					var scriptTAB = [];
+					
+					this.reconnect_duration=1000;
+					 
+					
+					var ws;
+				    var bconnected=false;
+				    this.init = function(){
+					            if(bconnected==false){ bconnected=true;
+					       //-------------------------------------------------------------------------------------
+					                   var host = url||location.origin.replace(/^http/, 'ws')
+									     
+									      var parser = document.createElement('a');
+									      parser.href = host;
+
+									      var wsHost = host;
+									      var openshiftNote = '';
+									      if (parser.port == 80 || parser.port == ''){
+											wsHost = parser.protocol+"//"+parser.hostname+":8000"; // Server requires port 8000
+											openshiftNote = " (using OpenShift port) ";
+									      }
+										  
+									      this.HDB_notes("Using "+wsHost+" for WebSocket connection"+openshiftNote);
+									      
+
+									    ws = new WebSocket(wsHost);
+										  
+									    ws.onmessage = function (event) {
+										  var command=event.data;
+										   me.HDB_messages(command);
+										   
+										   var pos = command.indexOf("|")+2;
+										   var c = command.substring(pos);
+										   var d = c.trim();
+										   if(d.substring(0,3).toLowerCase()=="js>"){ eval(d.substring(3)); scriptTAB.push( {"script":d.substring(3),"time": new Date()} ); }
+										   else{dataTAB.push( {"data":c,"reads":0,"time": new Date()} );}  
+									      };
+										  
+										  
+										ws.onerror = function (event) {
+											
+											me.HDB_errors("ERROR !!!");
+									       };
+										   
+										   
+										ws.onclose = function (event) {
+										
+										   if(me.reconnect_duration>0)
+										   {bconnected=false;setTimeout(function(){ if(bconnected==false){me.init();} }, me.reconnect_duration);}
+										    
+											me.HDB_messages("Disconnected !!!");
+										}
+										
+										
+						   //-------------------------------------------------------------------------------------
+						   }
+					   return this;
+					};
+					
+					this.sleep = function(dt){ if(bconnected==true){ if(dt != null && dt != undefined ){this.reconnect_duration=dt;}  ws.close();} };
+					this.die = function(){ this.sleep(0);};
+					
+var bdebug=true;
+this.HDB = function(msg){ if(bdebug==true){console.log(msg);} return this;};
+this.HDBerr = function(msg){ if(bdebug==true){console.error(msg);} return this;};
+this.HDBwarn = function(msg){ if(bdebug==true){console.warn(msg);} return this;};
+this.HDB_notes = function(msg){ if(bdebug==true){ var li = document.createElement('li');li.innerHTML = "LOG [ "+name+" ] >>> "+msg;document.querySelector('#notes').appendChild(li);} return this;};
+this.HDB_errors = function(msg){ if(bdebug==true){ var li = document.createElement('li');li.innerHTML = "ERR [ "+name+" ] >>> "+msg;document.querySelector('#errors').appendChild(li);} return this;};
+this.HDB_messages = function(msg){ if(bdebug==true){ var li = document.createElement('li');li.innerHTML = "MSG [ "+name+" ] >>> "+msg;document.querySelector('#messages').appendChild(li);} return this;};
+
+this.send = function(str){ if(bconnected==true && str != null && str != undefined){ ws.send(str);} };
+
+this.getNAME = function(){return name;};
+
+this.getDATA = function(i){
+
+   var last_index = dataTAB.length-1;
+   if(i<=last_index && i>=0){ dataTAB[i].reads++; return dataTAB[i];}
+   return {"data":"","reads":0,"time": "NONE"};
+};
+
+this.getSCRIPT = function(i){
+
+   var last_index = scriptTAB.length-1;
+   if(i<=last_index && i>=0){return scriptTAB[i];}
+   return {"script":"","time": "NONE"};
+};	
+
+this.delDATA = function(i){
+
+   var last_index = dataTAB.length-1;
+   if(i<=last_index && i>=0){ dataTAB.splice(i,1);  return true;}
+   return false;
+};
+
+this.delSCRIPT = function(i){
+
+   var last_index = dataTAB.length-1;
+   if(i<=last_index && i>=0){ scriptTAB.splice(i,1);  return true;}
+   return false;
+};
+
+this.delDATA_ALL = function(){ var t = dataTAB.length; var i;  for(i=0;i<t;i++){this.delDATA(i);} return this; };
+this.delSCRIPT_ALL = function(){ var t = scriptTAB.length; var i;  for(i=0;i<t;i++){this.delSCRIPT(i);} return this; };
+this.delALL = function(){ this.delDATA_ALL(); this.delSCRIPT_ALL(); };
+
+this.getLASTDATA = function(){return this.getDATA(dataTAB.length-1); };
+this.getLASTSCRIPT = function(){return this.getSCRIPT(dataTAB.length-1); };
+
+this.getFIRSTDATA = function(){return this.getDATA(0); };
+this.getFIRSTSCRIPT = function(){return this.getSCRIPT(0); };
+				
+if(auto_init==true){this.init();}
+				
+				}
+				
+				var tiger = new tigeri();
+				tiger.OpenEye("tigeri");
+				
+				/*
+				Sending Informations :
+				   tiger.Eye("connection_name").send("information")
+				
+				Getting Informations :
+				   tiger.Eye("connection_name").getDATA(index).data
+				   tiger.Eye("connection_name").getDATA(index).time
+				   tiger.Eye("connection_name").getDATA(index).reads
+				   
+				   tiger.Eye("connection_name").getSCRIPT(index).script
+				   tiger.Eye("connection_name").getSCRIPT(index).time
+				   
+				   tiger.Eye("connection_name").getFIRSTDATA()
+				   tiger.Eye("connection_name").getLASTDATA()
+				   tiger.Eye("connection_name").getFIRSTSCRIPT()
+				   tiger.Eye("connection_name").getLASTSCRIPT()
+				   
+				   tiger.Eye("connection_name").getNAME()
+				   
+				   tiger.GETNEWESTDATA("connection_name")
+				   tiger.IndexEye("connection_name")
+				   tiger.CountEyes()
+				   tiger.getEyesList()
+				   tiger.GETNEWESTDATA()
+				   this.look()		   
+				   
+				Deleting Informations    
+				   tiger.Eye("connection_name").delDATA(index)
+				   tiger.Eye("connection_name").delSCRIPT(index)
+				   tiger.Eye("connection_name").delDATA_ALL()
+				   tiger.Eye("connection_name").delSCRIPT_ALL()
+				   tiger.Eye("connection_name").delALL()
+				   
+			    Handeling Connection(s) :   
+				   tiger.OpenEye("connection_name")
+				   tiger.CloseEye("connection_name")
+				   tiger.Eye("connection_name").sleep(time_in_second)
+				   tiger.kill()
+				   tiger.sleep()
+				*/
+    </script>
+  </body>
+</html>
