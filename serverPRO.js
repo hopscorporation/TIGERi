@@ -5,7 +5,7 @@ var http = require("http")
 var express = require("express")
 var app = express()
 
-var ipaddress   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
+var ipaddress   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port        = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8000;
 var isOpenShift = process.env.OPENSHIFT_NODEJS_PORT ? true : false;
 
