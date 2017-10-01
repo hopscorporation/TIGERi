@@ -87,7 +87,7 @@ function vstr(str,bempty){ if(bempty==undefined){bempty=false;}  if(str == null 
 									      var wsHost = host;
 									      var openshiftNote = '';
 									      if (parser.port == 80 || parser.port == ''){
-											wsHost = parser.protocol+"//"+parser.hostname+":8080"; 
+											wsHost = parser.protocol+"//"+parser.hostname; 
 											openshiftNote = " (using OpenShift port) ";
 									      }
 										  
