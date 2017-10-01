@@ -7,9 +7,9 @@ TIGERi
 
  **TIGERi Project** includes 2 parts :
  
-> **1) A server part (NODEjs - Websocket)** .
+> **1) A server part ( NODEjs - Websocket )** 
 
-> **2) A client part (HTML - Javascript - Websocket)** .
+> **2) A client part ( HTML - Javascript - Websocket )** 
 
 ----------
 ### DEMO 
