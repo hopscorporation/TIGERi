@@ -1,4 +1,4 @@
-TIGERi
+                               TIGERi ![GitHub Logo](https://assets-cdn.github.com/favicon.ico)
 ===================
 
 ### What is TIGERi ?
