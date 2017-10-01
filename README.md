@@ -31,7 +31,8 @@ Bob(Client)-->SERVER: I am good thanks!
 SERVER-->Alice(Client): I am good thanks!
 ```
 
-> - Bidirectional communication between client and server :
+> - Bidirectional communication between the client and the server :
+```sequence
 Bob(Client)<-->SERVER<-->Alice(Client)
 ```
 
