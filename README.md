@@ -22,19 +22,19 @@ Bob-->Alice: I am good thanks!
 
 > - Technically :
 
-- [x] The server functions as a communication bridge  : 
-```sequence
-Alice(Client)->SERVER: Hello Bob, how are you?
-SERVER->Bob(Client): Hello Bob, how are you?
+   - [x] The server functions as a communication bridge  : 
+   ```sequence
+   Alice(Client)->SERVER: Hello Bob, how are you?
+   SERVER->Bob(Client): Hello Bob, how are you?
 
-Bob(Client)-->SERVER: I am good thanks!
-SERVER-->Alice(Client): I am good thanks!
-```
+   Bob(Client)-->SERVER: I am good thanks!
+   SERVER-->Alice(Client): I am good thanks!
+   ```
 
-- [x] Bidirectional communication between the client and the server :
-```sequence
-Bob(Client)<--->SERVER<--->Alice(Client)
-```
+   - [x] Bidirectional communication between the client and the server :
+   ```sequence
+   Bob(Client)<--->SERVER<--->Alice(Client)
+   ```
 
 ### How To Use TIGERi ?
 
