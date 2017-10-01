@@ -5,11 +5,11 @@ TIGERi
 
 ----------
 
- **TIGERi Project** includes 2 parts :
+ **TIGERi Project** includes 2 lightweight libraries :
  
-> **1) A server part ( NODEjs - Websocket )** 
+> **1) A server library ( NODEjs - Websocket )** 
 
-> **2) A client part ( HTML5 - Javascript - Websocket )** 
+> **2) A client library ( HTML5 - Javascript - Websocket )** 
 
 ----------
 ### DEMO 
