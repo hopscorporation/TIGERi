@@ -9,7 +9,7 @@ TIGERi
  
 > **1) A server part ( NODEjs - Websocket )** 
 
-> **2) A client part ( HTML - Javascript - Websocket )** 
+> **2) A client part ( HTML5 - Javascript - Websocket )** 
 
 ----------
 ### DEMO 
@@ -21,12 +21,18 @@ Bob-->Alice: I am good thanks!
 ```
 
 Technically :
-```sequence
-Alice->SERVER: Hello Bob, how are you?
-SERVER->Bob: Hello Bob, how are you?
 
-Bob-->SERVER: I am good thanks!
-SERVER-->Alice: I am good thanks!
+> - The server functions as a communication bridge  : 
+```sequence
+Alice(Client)->SERVER: Hello Bob, how are you?
+SERVER->Bob(Client): Hello Bob, how are you?
+
+Bob(Client)-->SERVER: I am good thanks!
+SERVER-->Alice(Client): I am good thanks!
+```
+
+> - Bidirectional communication between client and server :
+Bob(Client)<-->SERVER<-->Alice(Client)
 ```
 
 ### How To Use TIGERi ?
