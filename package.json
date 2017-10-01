@@ -10,8 +10,8 @@
   "description": "TIGERi Project",
   "devDependencies": { },
   "engines": {
-    "node": ">= 0.6.0",
-    "npm": ">= 1.0.0"
+    "node": "*",
+    "npm": "*"
   },
   "homepage": "https://github.com/hopscorporation/TIGERi",
   "keywords": [

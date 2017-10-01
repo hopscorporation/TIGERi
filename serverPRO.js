@@ -1,12 +1,10 @@
-#!/bin/env node
-
 var WebSocketServer = require("ws").Server
 var http = require("http")
 var express = require("express")
 var app = express()
 
-var ipaddress   = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-var port        = process.env.OPENSHIFT_NODEJS_PORT || 8000;
+var ipaddress   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0';
+var port        = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080;
 var isOpenShift = process.env.OPENSHIFT_NODEJS_PORT ? true : false;
 
 app.use(express.static(__dirname + "/"))
